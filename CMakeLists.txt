@@ -3,4 +3,6 @@ project(cerberus)
 
 set(CMAKE_CXX_STANDARD 14)
 
+add_subdirectory(apps)
+
 add_executable(cerberus main.cpp)
