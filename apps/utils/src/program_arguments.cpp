@@ -91,3 +91,11 @@ bool utils::ProgramArguments::ParseArguments(int argc, char *argv[]) {
 
   return are_required_present;
 }
+
+void utils::ProgramArguments::ShowCurrentAvailableOptions() const {
+  std::cout << "***** " << program_name_ << " *****" << std::endl;
+  std::cout << "\tCurrent Options:\n";
+  for (size_t i = 0; i < args_.size(); i++) {
+    std::cout << "\t--" << args_[i] << ": " << values_[i] << std::endl;
+  }
+}

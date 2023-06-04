@@ -40,6 +40,11 @@ class ProgramArguments {
    * \return false if an unknown option was detected, or a required option was not provided
    */
   bool ParseArguments(int argc, char *argv[]);
+
+  /**
+   * Print the current arguments set, and if available the value of the argument
+   */
+  void ShowCurrentAvailableOptions() const;
  private:
 
   std::string program_name_;
