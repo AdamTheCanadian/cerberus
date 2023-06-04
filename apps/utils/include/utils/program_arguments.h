@@ -32,6 +32,13 @@ class ProgramArguments {
                    const std::string &argDescription,
                    bool required);
 
+  /**
+   * Parse the command line options, assumes argc, and argv have not been modified from command line
+   * \param argc the arg count (typically from main.cpp)
+   * \param argv the arg vector (typically from main.cpp)
+   * \return true if successfully parsed all arguments, and all required options are present
+   * \return false if an unknown option was detected, or a required option was not provided
+   */
   bool ParseArguments(int argc, char *argv[]);
  private:
 

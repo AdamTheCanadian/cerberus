@@ -33,7 +33,7 @@ void utils::ProgramArguments::AddArgument(const std::string &argName,
   descriptions_.push_back(argDescription);
   required_.push_back(required);
   // We add an empty place holder string until we parse the arguments
-  values_.push_back(" ");
+  values_.push_back("");
 }
 
 bool utils::ProgramArguments::ParseArguments(int argc, char *argv[]) {
@@ -60,15 +60,34 @@ bool utils::ProgramArguments::ParseArguments(int argc, char *argv[]) {
   long_options.push_back({nullptr, 0, nullptr, 0});
 
   int option = 0;
+  // This makes getopt_long not exit or display any error messages when encountering an unknown option,
+  // we will handle the error message below
+  opterr = 0;
   while ((option = getopt_long(argc, argv, "", &long_options[0], nullptr)) != -1) {
     if (option <= args_.size()) {
       values_[option - 1] = std::string(optarg);
     }
     else {
-      std::cout << "Unknown option " << optarg << std::endl;
+      std::cout << "Unknown option " << argv[optind - 1] << std::endl;
       ShowUsage();
       return false;
     }
   }
-  return true;
+
+  // Check required arguments are present
+  bool are_required_present = true;
+  for (size_t i = 0; i < required_.size(); i++) {
+    if (required_[i]) {
+      if (values_[i].size() == 0) {
+        are_required_present = false;
+        std::cout << "Missing required argument " << args_[i] << std::endl;
+      }
+    }
+  }
+
+  if (!are_required_present) {
+    ShowUsage();
+  }
+
+  return are_required_present;
 }
