@@ -8,5 +8,6 @@ add_subdirectory(external)
 
 add_subdirectory(cerberus)
 
+add_subdirectory(vis)
 add_subdirectory(utils)
 add_subdirectory(apps)
