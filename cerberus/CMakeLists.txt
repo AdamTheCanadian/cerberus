@@ -8,7 +8,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 
 add_executable(${PROJECT_NAME}_tests
-        tests/main.cpp)
+        tests/main.cpp
+        tests/tests_orb.cpp)
 
 target_link_libraries(${PROJECT_NAME}_tests
         cerberus
