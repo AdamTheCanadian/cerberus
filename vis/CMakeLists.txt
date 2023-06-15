@@ -6,4 +6,4 @@ add_library(${PROJECT_NAME}
         src/main_window.c)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
-target_link_libraries(${PROJECT_NAME} glad glfw)
+target_link_libraries(${PROJECT_NAME} glad glfw cimgui)

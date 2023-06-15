@@ -8,6 +8,11 @@ extern "C" {
 #include "GLFW/glfw3.h"
 #include <stdbool.h>
 
+/* Include ImGui here so any users of main_window.h automatically get imgui functionality */
+#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+#include "cimgui.h"
+#include "cimgui_impl.h"
+
 #define VIS_MAIN_WINDOW_TITLE_MAX_LENGTH 128
 
 typedef struct {

@@ -40,6 +40,11 @@ void vis_main_window_init(vis_MainWindow *window) {
     printf("GLAD ERROR: Failed to initialize\n");
     return;
   }
+  igCreateContext(NULL);
+  const char* glsl_version = "#version 330 core";
+  ImGui_ImplGlfw_InitForOpenGL(window->glfw_window, true);
+  ImGui_ImplOpenGL3_Init(glsl_version);
+  igStyleColorsDark(NULL);
 }
 
 bool vis_main_window_still_open(vis_MainWindow *window) {
@@ -57,10 +62,15 @@ void vis_main_window_begin_frame(vis_MainWindow *window) {
                window->background_color[2],
                window->background_color[3]);
   glClear(GL_COLOR_BUFFER_BIT);
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  igNewFrame();
 }
 
 void vis_main_window_end_frame(vis_MainWindow *window) {
   assert(window != NULL);
   assert(window->glfw_window != NULL);
+  igRender();
+  ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData());
   glfwSwapBuffers(window->glfw_window);
 }
