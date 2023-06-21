@@ -1,4 +1,4 @@
-#include "vis/image_window.h"
+#include "gui/image_window.h"
 #include <assert.h>
 
 static const char* vs = "#version 330 core \n"
@@ -19,7 +19,7 @@ static const char* fs = "#version 330 core \n"
                  "FragColor = texture(texture1, TexCoord); \n"
                  "} \n";
 
-void vis_imageu8_window_init(vis_ImageU8Window *window) {
+void gui_imageu8_window_init(gui_ImageU8Window *window) {
   assert(window != NULL);
   assert(window->image != NULL);
 
@@ -81,7 +81,7 @@ void vis_imageu8_window_init(vis_ImageU8Window *window) {
   window->first_render = 1;
 }
 
-void vis_imageu8_window_upload(vis_ImageU8Window *window) {
+void gui_imageu8_window_upload(gui_ImageU8Window *window) {
   glBindTexture(GL_TEXTURE_2D, window->texture);
   if (window->first_render == 1) {
     glTexImage2D(GL_TEXTURE_2D,
@@ -108,7 +108,7 @@ void vis_imageu8_window_upload(vis_ImageU8Window *window) {
   }
 }
 
-void vis_imageu8_window_draw(vis_ImageU8Window *window) {
+void gui_imageu8_window_draw(gui_ImageU8Window *window) {
   glBindTexture(GL_TEXTURE_2D, window->texture);
   glViewport(0, 0, window->image->width, window->image->height);
   // render container

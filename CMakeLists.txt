@@ -9,6 +9,6 @@ add_subdirectory(external)
 add_subdirectory(cv)
 add_subdirectory(cerberus)
 
-add_subdirectory(vis)
+add_subdirectory(gui)
 add_subdirectory(utils)
 add_subdirectory(apps)

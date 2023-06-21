@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(vis)
+project(gui)
 
 include_directories(include)
 add_library(${PROJECT_NAME}

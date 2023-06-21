@@ -1,9 +1,9 @@
-#include "vis/main_window.h"
+#include "gui/main_window.h"
 #include "glad/glad.h"
 #include <assert.h>
 #include <stdio.h>
 
-void vis_main_window_init(vis_MainWindow *window) {
+void gui_main_window_init(gui_MainWindow *window) {
   assert(window != NULL);
 
   #if defined(__APPLE__)
@@ -47,13 +47,13 @@ void vis_main_window_init(vis_MainWindow *window) {
   igStyleColorsDark(NULL);
 }
 
-bool vis_main_window_still_open(vis_MainWindow *window) {
+bool gui_main_window_still_open(gui_MainWindow *window) {
   assert(window != NULL);
   assert(window->glfw_window != NULL);
   return !glfwWindowShouldClose(window->glfw_window);
 }
 
-void vis_main_window_begin_frame(vis_MainWindow *window) {
+void gui_main_window_begin_frame(gui_MainWindow *window) {
   assert(window != NULL);
   assert(window->glfw_window != NULL);
   glfwPollEvents();
@@ -67,7 +67,7 @@ void vis_main_window_begin_frame(vis_MainWindow *window) {
   igNewFrame();
 }
 
-void vis_main_window_end_frame(vis_MainWindow *window) {
+void gui_main_window_end_frame(gui_MainWindow *window) {
   assert(window != NULL);
   assert(window->glfw_window != NULL);
   igRender();
