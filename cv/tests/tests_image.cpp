@@ -12,7 +12,6 @@ TEST(cvImageU8, Resize) {
 
   cv_io_read_imageu8("/Users/adamclare/data/2011_10_03/2011_10_03_drive_0027_sync/image_00/data/0000000000.png",
                      &img);
-
   uint8_t resize_buffer[1400 * 1400] = {0};
   cv_ImageU8 resized_img;
   resized_img.capacity = 1400 * 1400;
