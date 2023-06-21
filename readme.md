@@ -1,3 +1,4 @@
 # Cerberus
 
-![Logo](./docs/images/avatar.jpeg)
+![Logo](./docs/images/avatar.jpg)
+
