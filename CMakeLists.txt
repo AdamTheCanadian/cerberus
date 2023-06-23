@@ -6,6 +6,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wconversion")
 
 add_subdirectory(external)
 
+add_subdirectory(core)
 add_subdirectory(geodetic)
 add_subdirectory(cv)
 add_subdirectory(cerberus)
