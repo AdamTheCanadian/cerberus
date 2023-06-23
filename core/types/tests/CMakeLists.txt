@@ -1,8 +1,9 @@
-project(type_tests)
+project(geodetic_tests)
 
 add_executable(${PROJECT_NAME}
         main.cpp
-        tests_geodetic.cpp)
+        tests_orientation_conversions.cpp
+        tests_units.cpp)
 
 target_link_libraries(${PROJECT_NAME}
         geodetic

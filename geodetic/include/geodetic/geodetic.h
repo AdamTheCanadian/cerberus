@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include "core/units.h"
+#include "types/units.h"
 
 typedef struct {
   // Typically denoted as R_N

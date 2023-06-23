@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 project(core)
 
-include_directories(include)
-add_library(${PROJECT_NAME} INTERFACE)
-target_include_directories(${PROJECT_NAME} INTERFACE include)
+add_subdirectory(linear_algebra)
+add_subdirectory(types)
