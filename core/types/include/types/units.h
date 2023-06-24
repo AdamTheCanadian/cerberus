@@ -35,11 +35,19 @@ static inline Degrees rad_to_deg(Radians r) {
 static inline double cos_rad(Radians r) {
   return cos(r.rad);
 }
+
 /**
  * \return cos(r)
  */
 static inline double sin_rad(Radians r) {
   return sin(r.rad);
+}
+
+/**
+ * \return tan(r)
+ */
+static inline double tan_rad(Radians r) {
+  return tan(r.rad);
 }
 
 #ifdef __cplusplus
