@@ -21,24 +21,24 @@ typedef struct {
   double m;
 } Metres;
 
-inline Radians deg_to_rad(Degrees d) {
+static inline Radians deg_to_rad(Degrees d) {
   return (Radians){.rad = d.deg * UNITS_DEG_TO_RAD_D};
 }
 
-inline Degrees rad_to_deg(Radians r) {
+static inline Degrees rad_to_deg(Radians r) {
   return (Degrees){.deg = r.rad * UNITS_RAD_TO_DEG_D};
 }
 
 /**
  * \return cos(r)
  */
-inline double cos_rad(Radians r) {
+static inline double cos_rad(Radians r) {
   return cos(r.rad);
 }
 /**
  * \return cos(r)
  */
-inline double sin_rad(Radians r) {
+static inline double sin_rad(Radians r) {
   return sin(r.rad);
 }
 
