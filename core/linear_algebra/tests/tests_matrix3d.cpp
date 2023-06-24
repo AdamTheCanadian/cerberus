@@ -21,3 +21,47 @@ TEST(Matrix3d, MultiplyMat3d) {
     EXPECT_NEAR(r.mat[i], true_result[i], 1.0e-10);
   }
 }
+
+TEST(Matrix3d, Transpose) {
+  Matrix3d mat = {.mat = {
+      1, 2, 3,
+      4, 5, 6,
+      7, 8, 9}};
+
+  double true_result[9] = {
+      1, 4, 7,
+      2, 5, 8,
+      3, 6, 9};
+
+  Matrix3d T = mat3d_transpose(&mat);
+  for (int i = 0; i < 9; i++) {
+    EXPECT_NEAR(T.mat[i], true_result[i], 1.0e-10);
+  }
+}
+
+TEST(Matrix3d, Idenity) {
+
+  double true_result[9] = {
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1};
+
+  Matrix3d I = mat3d_identity();
+  for (int i = 0; i < 9; i++) {
+    EXPECT_NEAR(I.mat[i], true_result[i], 1.0e-10);
+  }
+}
+
+TEST(Matrix3d, Scale) {
+
+  double true_result[9] = {
+      2, 0, 0,
+      0, 2, 0,
+      0, 0, 2};
+
+  Matrix3d I = mat3d_identity();
+  Matrix3d r = mat3d_scale(&I, 2);
+  for (int i = 0; i < 9; i++) {
+    EXPECT_NEAR(r.mat[i], true_result[i], 1.0e-10);
+  }
+}

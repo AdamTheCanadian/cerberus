@@ -11,6 +11,15 @@ typedef struct {
 Matrix3d mat3d_multiply_mat3d(Matrix3d const *mat1,
                               Matrix3d const *mat2);
 
+Matrix3d mat3d_transpose(Matrix3d const *mat1);
+
+Matrix3d mat3d_identity();
+
+/**
+ * \return mat * s
+ */
+Matrix3d mat3d_scale(Matrix3d const *mat,
+                     double s);
 #ifdef __cplusplus
 }
 #endif
