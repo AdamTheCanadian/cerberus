@@ -8,7 +8,7 @@ TEST(Geodetic, Radii) {
 }
 
 TEST(Geodetic, IncrementPosition) {
-  geodetic_Position pos {
+  geodetic_PositionLLH pos {
     .latitude = Radians{.rad = 0.890117918520000},
     .longitude = Radians{.rad = 0},
     .height = Metres{.m = 10}
@@ -19,14 +19,27 @@ TEST(Geodetic, IncrementPosition) {
   Metres u = Metres{.m = 5.6};
 
   // Test the increment that returns a new position
-  geodetic_Position new_pos = geodetic_position_add_enu(&pos, e, n, u);
+  geodetic_PositionLLH new_pos = geodetic_position_llh_add_enu(&pos, e, n, u);
   EXPECT_NEAR(new_pos.latitude.rad, 0.890117385108579, 1.0e-10);
   EXPECT_NEAR(new_pos.longitude.rad, 2.98356283977574e-07, 1.0e-10);
   EXPECT_NEAR(new_pos.height.m, 15.6, 1.0e-10);
 
   // Test the increment that modifies in place
-  geodetic_position_add_enu_in_place(&pos, e, n, u);
+  geodetic_position_llh_add_enu_in_place(&pos, e, n, u);
   EXPECT_NEAR(pos.latitude.rad, 0.890117385108579, 1.0e-10);
   EXPECT_NEAR(pos.longitude.rad, 2.98356283977574e-07, 1.0e-10);
   EXPECT_NEAR(pos.height.m, 15.6, 1.0e-10);
+}
+
+TEST(Geodetic, LLHToXYZ) {
+  geodetic_PositionLLH pos {
+      .latitude = Radians{.rad = 0.890117918520000},
+      .longitude = Radians{.rad = 0},
+      .height = Metres{.m = 10}
+  };
+
+  auto xyz = geodetic_position_llh_convert_to_xyz(&pos);
+  EXPECT_NEAR(xyz.x.m, 4022036.95528731, 1.0e-8);
+  EXPECT_NEAR(xyz.y.m, 0, 1.0e-8);
+  EXPECT_NEAR(xyz.z.m, 4933552.39169670, 1.0e-8);
 }
