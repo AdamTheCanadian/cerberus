@@ -65,3 +65,55 @@ TEST(Matrix3d, Scale) {
     EXPECT_NEAR(r.mat[i], true_result[i], 1.0e-10);
   }
 }
+
+TEST(Matrix3d, At) {
+  Matrix3d mat = {{
+    1, 2, 3,
+    4, 5, 6,
+    7, 8, 9}};
+
+  EXPECT_EQ(mat3d_at(&mat, 0, 0), 1);
+  EXPECT_EQ(mat3d_at(&mat, 1, 0), 4);
+  EXPECT_EQ(mat3d_at(&mat, 2, 2), 9);
+}
+
+TEST(Matrix3d, MultiplyVec3) {
+  Matrix3d mat = {{
+                      1, 2, 3,
+                      4, 5, 6,
+                      7, 8, 9}};
+
+  Vector3d vec = {.x = 10, .y = 11, .z = 12};
+
+  Vector3d r = mat3d_multiply_vec3d(&mat, &vec);
+  EXPECT_EQ(r.x, 68);
+  EXPECT_EQ(r.y, 167);
+  EXPECT_EQ(r.z, 266);
+}
+
+TEST(Matrix3d, Determinant) {
+  Matrix3d mat = {.mat = {
+      0.417022004702574, 0.302332572631840, 0.186260211377671,
+      0.720324493442158, 0.146755890817113, 0.345560727043048,
+      0.000114374817344887, 0.0923385947687978, 0.396767474230670}};
+
+  double det = mat3d_determinant(&mat);
+  EXPECT_NEAR(det, -0.0630336057475167, 1.0e-10);
+}
+
+TEST(Matrix3d, Inverse) {
+  Matrix3d mat = {.mat = {
+      0.417022004702574, 0.302332572631840, 0.186260211377671,
+      0.720324493442158, 0.146755890817113, 0.345560727043048,
+      0.000114374817344887, 0.0923385947687978, 0.396767474230670}};
+
+  double true_inverse[9] = {
+      -0.417545083664767, 1.63018954448581, -1.22378340011080,
+      4.53348341818051, -2.62462320003506, 0.157672000690080,
+      -1.05494466856528, 0.610351354850840, 2.48402609345886};
+
+  Matrix3d inv = mat3d_inverse(&mat);
+  for (int i = 0; i < 9; i++) {
+    EXPECT_NEAR(inv.mat[i], true_inverse[i], 1.0e-10);
+  }
+}
