@@ -2,9 +2,15 @@
 #include <math.h>
 
 static const double WGS84_SEMI_MAJOR = 6378137;
+static const double WGS84_SEMI_MINOR = 6356752.31425;
+static const double WGS84_SEMI_MAJOR_SQR = WGS84_SEMI_MAJOR * WGS84_SEMI_MAJOR;
 static const double WGS84_ECCENTRICITY = 0.0818191908425;
 static const double WGS84_ECCENTRICITY_SQR = WGS84_ECCENTRICITY * WGS84_ECCENTRICITY;
 static const double WGS84_ONE_MINUS_ECCENTRICITY_SQR = 1.0 - WGS84_ECCENTRICITY_SQR;
+static const double WGS84_FLATTENING = 1 / 298.257223563;
+static const double WGS84_MU = 3.986004418e14;
+static const double WGS84_OMEGA = 7.292115e-5;
+static const double WGS84_OMEGA_SQR = WGS84_OMEGA * WGS84_OMEGA;
 
 geodetic_Radii geodetic_radii_calculate(Radians latitude) {
   double sin_lat = sin(latitude.rad);
@@ -54,4 +60,21 @@ geodetic_PositionXYZ geodetic_position_llh_convert_to_xyz(const geodetic_Positio
       .y.m = r_h * cos_lat * sin_lon,
       .z.m = (WGS84_ONE_MINUS_ECCENTRICITY_SQR * radii.transverse.m + pos->height.m) * sin_lat};
   return return_pos;
+}
+
+Vector3d geodetic_calculate_gravity_ned(const geodetic_PositionLLH *pos) {
+  Vector3d return_vec;
+  double sin_lat = sin_rad(pos->latitude);
+  // Square sin
+  sin_lat *= sin_lat;
+
+  const double g_0 = 9.7803253359 * (1.0 + 0.001931853 * sin_lat) / sqrt(1.0 - WGS84_ECCENTRICITY_SQR * sin_lat);
+
+  return_vec.x = -8.08e-9 * pos->height.m * sin(2.0 * pos->latitude.rad);
+  return_vec.y = 0;
+  return_vec.z = g_0 * (1.0 - (2.0 / WGS84_SEMI_MAJOR) * (1.0 + WGS84_FLATTENING * (1.0 - 2.0 * WGS84_FLATTENING) +
+      (WGS84_OMEGA_SQR * WGS84_SEMI_MAJOR_SQR * WGS84_SEMI_MINOR / WGS84_MU)) * pos->height.m +
+          (3.0 * (pos->height.m * pos->height.m) / WGS84_SEMI_MAJOR_SQR));
+
+  return return_vec;
 }

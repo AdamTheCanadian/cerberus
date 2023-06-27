@@ -4,7 +4,9 @@
 extern "C" {
 #endif
 
+#include "linear_algebra/vector3d.h"
 #include "types/units.h"
+#include "types/rotation_matrix.h"
 
 typedef struct {
   // Typically denoted as R_N
@@ -19,6 +21,11 @@ typedef struct {
   Metres height;
 } geodetic_PositionLLH;
 
+typedef struct {
+  geodetic_PositionLLH pos;
+  double vel_ned[3];
+  Rotation3d att;
+} geodetic_PoseLLH;
 
 typedef struct {
   Metres x;
@@ -67,6 +74,13 @@ void geodetic_position_llh_add_enu_in_place(geodetic_PositionLLH *pos,
  * \return converted position
  */
 geodetic_PositionXYZ geodetic_position_llh_convert_to_xyz(const geodetic_PositionLLH *pos);
+
+/**
+ *
+ * \param pos
+ * \return
+ */
+Vector3d geodetic_calculate_gravity_ned(const geodetic_PositionLLH *pos);
 
 #ifdef __cplusplus
 }

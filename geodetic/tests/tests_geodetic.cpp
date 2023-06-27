@@ -43,3 +43,15 @@ TEST(Geodetic, LLHToXYZ) {
   EXPECT_NEAR(xyz.y.m, 0, 1.0e-8);
   EXPECT_NEAR(xyz.z.m, 4933552.39169670, 1.0e-8);
 }
+
+TEST(Geodetic, Gravity) {
+  geodetic_PositionLLH pos {
+      .latitude = Radians{.rad = 0.890117918520000},
+      .longitude = Radians{.rad = 0},
+      .height = Metres{.m = 10}
+  };
+  Vector3d g = geodetic_calculate_gravity_ned(&pos);
+  EXPECT_NEAR(g.x, -7.90343261391943e-08, 1.0e-10);
+  EXPECT_NEAR(g.y, 0, 1.0e-10);
+  EXPECT_NEAR(g.z, 9.811560478021, 1.0e-6);
+}
