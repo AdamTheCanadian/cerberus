@@ -13,3 +13,10 @@ Rotation3d euler_to_rotation3d(const Euler *e) {
       -cos_x * sin_z + sin_x * sin_y * cos_z, cos_x * cos_z + sin_x * sin_y * sin_z, sin_x * cos_y,
       sin_x * sin_z + cos_x * sin_y * cos_z, -sin_x * cos_z + cos_x * sin_y * sin_z, cos_x * cos_y}};
 }
+
+Rotation3d skew_symmetric(Vector3d const *v) {
+  return (Rotation3d) {.mat = {
+      0, -v->z, v->y,
+      v->z, 0, -v->x,
+      -v->y, v->x, 0}};
+}

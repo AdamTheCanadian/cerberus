@@ -6,6 +6,7 @@ extern "C" {
 
 #include "types/euler.h"
 #include "types/rotation_matrix.h"
+#include "linear_algebra/vector3d.h"
 
 /**
  * Convert a set of euler angles into a 3D rotation matrix
@@ -13,6 +14,11 @@ extern "C" {
  * \return
  */
 Rotation3d euler_to_rotation3d(const Euler *e);
+
+/**
+ * Convert a 3D vector into a skew symmetric matrix
+ */
+Rotation3d skew_symmetric(Vector3d const *v);
 
 #ifdef __cplusplus
 }
