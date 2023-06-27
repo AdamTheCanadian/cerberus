@@ -55,3 +55,15 @@ TEST(Geodetic, Gravity) {
   EXPECT_NEAR(g.y, 0, 1.0e-10);
   EXPECT_NEAR(g.z, 9.811560478021, 1.0e-6);
 }
+
+TEST(Geodetic, AngularRate) {
+  geodetic_PositionLLH pos {
+      .latitude = Radians{.rad = 0.890117918520000},
+      .longitude = Radians{.rad = 0},
+      .height = Metres{.m = 10}
+  };
+  Vector3d angular_rate = geodetic_calculate_angular_rate_ned(&pos);
+  EXPECT_NEAR(angular_rate.x, 4.58907666336400e-05, 1.0e-10);
+  EXPECT_NEAR(angular_rate.y, 0, 1.0e-10);
+  EXPECT_NEAR(angular_rate.z, -5.66703772274307e-05, 1.0e-10);
+}

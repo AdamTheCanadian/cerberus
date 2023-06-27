@@ -78,3 +78,10 @@ Vector3d geodetic_calculate_gravity_ned(const geodetic_PositionLLH *pos) {
 
   return return_vec;
 }
+
+Vector3d geodetic_calculate_angular_rate_ned(geodetic_PositionLLH const *pos) {
+  return (Vector3d) {.vec = {
+      WGS84_OMEGA * cos_rad(pos->latitude),
+      0,
+      WGS84_OMEGA * -sin_rad(pos->latitude)}};
+}

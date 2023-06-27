@@ -82,6 +82,11 @@ geodetic_PositionXYZ geodetic_position_llh_convert_to_xyz(const geodetic_Positio
  */
 Vector3d geodetic_calculate_gravity_ned(const geodetic_PositionLLH *pos);
 
+/**
+ * Calculate the angular rate of the ECEF frame resolved about the NED frame
+ */
+Vector3d geodetic_calculate_angular_rate_ned(geodetic_PositionLLH const *pos);
+
 #ifdef __cplusplus
 }
 #endif
