@@ -132,8 +132,8 @@ int main(int argc, char *argv[]) {
       avg_C_b_n = mat3d_multiply_mat3d(&tmp3, &skew);
     }
     else {
-      for (int i = 0; i < 9; i++) {
-        avg_C_b_n.mat[i] = prev_pose->att.mat[i] - skew.mat[i];
+      for (int j = 0; j < 9; j++) {
+        avg_C_b_n.mat[j] = prev_pose->att.mat[j] - skew.mat[j];
       }
     }
     Matrix3d inv_prev_att = mat3d_inverse(&prev_pose->att);
