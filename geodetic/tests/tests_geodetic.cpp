@@ -56,14 +56,33 @@ TEST(Geodetic, Gravity) {
   EXPECT_NEAR(g.z, 9.811560478021, 1.0e-6);
 }
 
-TEST(Geodetic, AngularRate) {
+TEST(Geodetic, AngularRateECEF) {
   geodetic_PositionLLH pos {
       .latitude = Radians{.rad = 0.890117918520000},
       .longitude = Radians{.rad = 0},
       .height = Metres{.m = 10}
   };
-  Vector3d angular_rate = geodetic_calculate_angular_rate_ned(&pos);
+  Vector3d angular_rate = geodetic_calculate_angular_rate_ecef_ned(&pos);
   EXPECT_NEAR(angular_rate.x, 4.58907666336400e-05, 1.0e-10);
   EXPECT_NEAR(angular_rate.y, 0, 1.0e-10);
   EXPECT_NEAR(angular_rate.z, -5.66703772274307e-05, 1.0e-10);
+}
+
+TEST(Geodetic, AngularRateNED) {
+  geodetic_PositionLLH pos {
+      .latitude = Radians{.rad = 0.890117918520000},
+      .longitude = Radians{.rad = 0},
+      .height = Metres{.m = 10}
+  };
+  geodetic_PoseLLH pose = {
+      .pos = pos,
+      .vel_ned = {0, 0, 0},
+      .att = {.mat = {1, 0, 0,
+                      0, 1, 0,
+                      0, 0, 1}}
+  };
+  Vector3d angular_rate = geodetic_calculate_angular_rate_ned(&pose);
+  EXPECT_NEAR(angular_rate.x, 0, 1.0e-10);
+  EXPECT_NEAR(angular_rate.y, 0, 1.0e-10);
+  EXPECT_NEAR(angular_rate.z, 0, 1.0e-10);
 }
