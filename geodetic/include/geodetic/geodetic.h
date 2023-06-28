@@ -23,7 +23,7 @@ typedef struct {
 
 typedef struct {
   geodetic_PositionLLH pos;
-  double vel_ned[3];
+  Vector3d vel_ned;
   Rotation3d att;
 } geodetic_PoseLLH;
 

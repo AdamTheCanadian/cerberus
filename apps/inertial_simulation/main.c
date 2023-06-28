@@ -1,6 +1,7 @@
 #include "geodetic/geodetic.h"
 #include "types/units.h"
 #include "types/orientation_conversions.h"
+#include "inertial/inertial.h"
 #include <stdio.h>
 
 typedef struct {
@@ -9,9 +10,11 @@ typedef struct {
 } MotionProfile;
 
 #define MAX_PROFILE_SIZE 10000
-MotionProfile true_sim_motion_profile[MAX_PROFILE_SIZE];
-// The profile after applying IMU model parameters
-MotionProfile imu_sim_profile[MAX_PROFILE_SIZE];
+MotionProfile true_sim_motion_profile[MAX_PROFILE_SIZE] = {0};
+IMUData all_imu_data[MAX_PROFILE_SIZE] = {0};
+// The profile after using the imu generated measurements to compute the updated position
+MotionProfile imu_profile[MAX_PROFILE_SIZE] = {0};
+
 
 int main(int argc, char *argv[]) {
 
@@ -25,9 +28,9 @@ int main(int argc, char *argv[]) {
     true_sim_motion_profile[idx].pose.pos.latitude = deg_to_rad((Degrees){.deg = 51});
     true_sim_motion_profile[idx].pose.pos.longitude.rad = 0;
     true_sim_motion_profile[idx].pose.pos.height.m = 10;
-    true_sim_motion_profile[idx].pose.vel_ned[0] = 0;
-    true_sim_motion_profile[idx].pose.vel_ned[1] = 0;
-    true_sim_motion_profile[idx].pose.vel_ned[2] = 0;
+    true_sim_motion_profile[idx].pose.vel_ned.vec[0] = 0;
+    true_sim_motion_profile[idx].pose.vel_ned.vec[1] = 0;
+    true_sim_motion_profile[idx].pose.vel_ned.vec[2] = 0;
     Euler e = {.x.rad = 0, .y.rad = 0, .z.rad = 0};
     true_sim_motion_profile[idx].pose.att = euler_to_rotation3d(&e);
     idx++;
@@ -42,9 +45,6 @@ int main(int argc, char *argv[]) {
 
     // Angular rate of ecef frame, resolved about NED frame
     const Vector3d omega_ie_n = geodetic_calculate_angular_rate_ecef_ned(&prev_pose->pos);
-
-    const geodetic_Radii prev_radii = geodetic_radii_calculate(prev_pose->pos.latitude);
-    const geodetic_Radii curr_radii = geodetic_radii_calculate(curr_pose->pos.latitude);
 
     // Angular rate of NED frame w.r.t to ECEF frame
     const Vector3d prev_omega_en_n = geodetic_calculate_angular_rate_ned(prev_pose);
@@ -94,9 +94,9 @@ int main(int argc, char *argv[]) {
     const Vector3d vec_omega = mat3d_multiply_vec3d(&skew_omega, &tmp_omega);
 
     const double acc[3] = {
-        (curr_pose->vel_ned[0] - prev_pose->vel_ned[0]) / dt,
-        (curr_pose->vel_ned[1] - prev_pose->vel_ned[1]) / dt,
-        (curr_pose->vel_ned[2] - prev_pose->vel_ned[2]) / dt};
+        (curr_pose->vel_ned.x - prev_pose->vel_ned.x) / dt,
+        (curr_pose->vel_ned.y - prev_pose->vel_ned.y) / dt,
+        (curr_pose->vel_ned.z - prev_pose->vel_ned.z) / dt};
     // specific force resolved about ecef axes, this will be updated over several steps
     Vector3d f_ib_n = {.vec = {
       acc[0] - gravity.vec[0] + vec_omega.vec[0],
@@ -137,9 +137,26 @@ int main(int argc, char *argv[]) {
       }
     }
     Matrix3d inv_prev_att = mat3d_inverse(&prev_pose->att);
-    f_ib_n = mat3d_multiply_vec3d(&inv_prev_att, &f_ib_n);
+    Vector3d f_ib_b = mat3d_multiply_vec3d(&inv_prev_att, &f_ib_n);
 
-    printf("f_ib_n: %.3f %.3f %.3f\n", f_ib_n.vec[0], f_ib_n.vec[1], f_ib_n.vec[2]);
+    all_imu_data[i].time = true_sim_motion_profile[i].time;
+    all_imu_data[i].acc = f_ib_b;
+    all_imu_data[i].gyro.x = omega_ib_b[0];
+    all_imu_data[i].gyro.y = omega_ib_b[1];
+    all_imu_data[i].gyro.z = omega_ib_b[2];
+    printf("f_ib_n: %.3f %.3f %.3f\n", f_ib_b.vec[0], f_ib_b.vec[1], f_ib_b.vec[2]);
     printf("omega_ib_b: %.7f %.7f %.7f\n", omega_ib_b[0], omega_ib_b[1], omega_ib_b[2]);
+  }
+
+  // **** Nav equations ****
+  // Initialize the initial position to the true position
+  imu_profile[0] = true_sim_motion_profile[0];
+  for (int i = 1; i < idx; i++) {
+    imu_profile[i].pose = inertial_update_ned(&imu_profile[i-1].pose, imu_profile[i].time, &all_imu_data[i]);
+    imu_profile[i].time = all_imu_data[i].time;
+
+    printf("Pose %.7f, %.7f, %.3f\n", imu_profile[i].pose.pos.latitude.rad,
+           imu_profile[i].pose.pos.longitude.rad,
+           imu_profile[i].pose.pos.height.m);
   }
 }

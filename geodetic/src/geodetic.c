@@ -89,8 +89,8 @@ Vector3d geodetic_calculate_angular_rate_ecef_ned(geodetic_PositionLLH const *po
 Vector3d geodetic_calculate_angular_rate_ned(geodetic_PoseLLH const *pose) {
   const geodetic_Radii radii = geodetic_radii_calculate(pose->pos.latitude);
   return (Vector3d) {.vec = {
-      pose->vel_ned[1] / (radii.transverse.m + pose->pos.height.m),
-      -pose->vel_ned[0] / (radii.meridian.m + pose->pos.height.m),
-      -pose->vel_ned[1] * tan_rad(pose->pos.latitude) / (radii.transverse.m + pose->pos.height.m)
+      pose->vel_ned.vec[1] / (radii.transverse.m + pose->pos.height.m),
+      -pose->vel_ned.vec[0] / (radii.meridian.m + pose->pos.height.m),
+      -pose->vel_ned.vec[1] * tan_rad(pose->pos.latitude) / (radii.transverse.m + pose->pos.height.m)
   }};
 }

@@ -8,6 +8,7 @@ add_subdirectory(external)
 
 add_subdirectory(core)
 add_subdirectory(geodetic)
+add_subdirectory(inertial)
 add_subdirectory(cv)
 add_subdirectory(cerberus)
 

@@ -20,3 +20,14 @@ Rotation3d skew_symmetric(Vector3d const *v) {
       v->z, 0, -v->x,
       -v->y, v->x, 0}};
 }
+
+Rotation3d skew_symmetric_sum_two_vectors(Vector3d const *v1,
+                                          Vector3d const *v2){
+  const double x = v1->x + v2->x;
+  const double y = v1->y + v2->y;
+  const double z = v1->z + v2->z;
+  return (Rotation3d) {.mat = {
+      0, -z, y,
+      z, 0, -x,
+      -y, x, 0}};
+}

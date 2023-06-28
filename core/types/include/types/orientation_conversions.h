@@ -20,6 +20,12 @@ Rotation3d euler_to_rotation3d(const Euler *e);
  */
 Rotation3d skew_symmetric(Vector3d const *v);
 
+/**
+ * \return skew symmetric matrix of (v1 + v2)
+ */
+Rotation3d skew_symmetric_sum_two_vectors(Vector3d const *v1,
+                                          Vector3d const *v2);
+
 #ifdef __cplusplus
 }
 #endif
