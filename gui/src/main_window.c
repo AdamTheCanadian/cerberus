@@ -45,6 +45,7 @@ void gui_main_window_init(gui_MainWindow *window) {
   ImGui_ImplGlfw_InitForOpenGL(window->glfw_window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
   igStyleColorsDark(NULL);
+  ImPlot_CreateContext();
 }
 
 bool gui_main_window_still_open(gui_MainWindow *window) {

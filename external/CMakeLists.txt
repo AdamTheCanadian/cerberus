@@ -18,15 +18,19 @@ add_compile_definitions("CIMGUI_USE_OPENGL3")
 add_definitions("-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
 include_directories(cimgui)
 include_directories(cimgui/imgui/)
-include_directories(cimgui/cimplot/)
+include_directories(cimgui/implot/)
 
-set(IMGUI_SOURCES 
-  cimgui/cimgui.cpp 
-  cimgui/imgui/imgui.cpp 
-  cimgui/imgui/imgui_draw.cpp 
-  cimgui/imgui/imgui_demo.cpp 
-  cimgui/imgui/imgui_widgets.cpp
-  cimgui/imgui/imgui_tables.cpp
+set(IMGUI_SOURCES
+        cimgui/cimgui.cpp
+        cimgui/cimplot.cpp
+        cimgui/imgui/imgui.cpp
+        cimgui/imgui/imgui_draw.cpp
+        cimgui/imgui/imgui_demo.cpp
+        cimgui/imgui/imgui_widgets.cpp
+        cimgui/imgui/imgui_tables.cpp
+        cimgui/implot/implot.cpp
+        cimgui/implot/implot_items.cpp
+        cimgui/implot/implot_demo.cpp
 )
 
 if (WIN32)

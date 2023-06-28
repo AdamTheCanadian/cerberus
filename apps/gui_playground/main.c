@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
     gui_main_window_begin_frame(&main_window);
     gui_imageu8_window_draw(&image_window);
     igShowDemoWindow(NULL);
+    ImPlot_ShowDemoWindow(NULL);
     gui_main_window_end_frame(&main_window);
   }
 }

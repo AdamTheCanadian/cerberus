@@ -12,6 +12,7 @@ extern "C" {
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "cimgui.h"
 #include "cimgui_impl.h"
+#include "cimplot.h"
 
 #define GUI_MAIN_WINDOW_TITLE_MAX_LENGTH 128
 
