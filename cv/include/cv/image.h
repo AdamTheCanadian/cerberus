@@ -31,6 +31,12 @@ typedef struct {
 void cv_imageu8_resize(cv_ImageU8 const *src,
                        cv_ImageU8 *dst);
 
+static inline uint8_t cv_imageu8_at(cv_ImageU8 const *img,
+                                    int col,
+                                    int row) {
+  return img->image[(int)img->width * row + col];
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -53,24 +53,31 @@ void cv_imageu8_resize(cv_ImageU8 const *src,
   const uint64_t dst_width = dst->width;
   const uint64_t dst_height = dst->height;
   // Calculate the scaling factors in both dimensions
-  double scaleX = (double)src_width / dst_width;
-  double scaleY = (double)src_height / dst_height;
+  const double x_scale = (double)(src_width - 1) / (double)(dst_width - 1);
+  const double y_scale = (double)(src_height - 1) / (double)(dst_height - 1);
 
   // Iterate over each pixel in the output image
   for (int y = 0; y < dst_height; y++) {
-    for (int x = 0; x < dst_width; x++)
-    {
-      // Calculate the corresponding coordinates in the input image
-      double inputX = x * scaleX;
-      double inputY = y * scaleY;
+    for (int x = 0; x < dst_width; x++) {
 
-      // Perform bilinear interpolation at the calculated coordinates
-      unsigned char interpolatedValue = bilinear_interpolate(src,
-                                                             inputX,
-                                                             inputY);
+      const double x_l = floor(x_scale * x);
+      const double x_h = ceil(x_scale * x);
+      const double y_l = floor(y_scale * y);
+      const double y_h = ceil(y_scale * y);
+
+      const double x_weight = (x_scale * x) - x_l;
+      const double y_weight = (y_scale * y) - y_l;
+
+      const uint8_t a = cv_imageu8_at(src, x_l, y_l);
+      const uint8_t b = cv_imageu8_at(src, x_h, y_l);
+      const uint8_t c = cv_imageu8_at(src, x_l, y_h);
+      const uint8_t d = cv_imageu8_at(src, x_h, y_h);
 
       // Store the interpolated value in the output image
-      dst->image[y * dst_width + x] = interpolatedValue;
+      dst->image[y * dst_width + x] = (uint8_t)(a * (1.0 - x_weight) * (1.0 - y_weight) +
+          b * x_weight * (1.0 - y_weight) +
+          c * y_weight * (1.0 - x_weight) +
+          d * x_weight * y_weight);
     }
   }
 }

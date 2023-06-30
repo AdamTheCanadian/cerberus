@@ -10,8 +10,8 @@ target_link_libraries(${PROJECT_NAME}
         gtest
         pthread)
 # This command will run the unit tests as part of the build
-#add_custom_command(
-#        TARGET ${PROJECT_NAME}
-#        COMMENT "Running ${PROJECT_NAME} tests"
-#        POST_BUILD
-#        COMMAND ${PROJECT_NAME})
+add_custom_command(
+        TARGET ${PROJECT_NAME}
+        COMMENT "Running ${PROJECT_NAME} tests"
+        POST_BUILD
+        COMMAND ${PROJECT_NAME})

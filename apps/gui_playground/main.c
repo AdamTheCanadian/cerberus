@@ -26,11 +26,19 @@ int main(int argc, char *argv[]) {
   img.capacity = 1400 * 1400;
   img.image = image_buffer;
 
+  uint8_t buff2[1200 * 1200];
+  cv_ImageU8 img2;
+  img2.capacity = 1400 * 1400;
+  img2.image = buff2;
+  img2.height = 600;
+  img2.width = 600;
+
   cv_io_read_imageu8("/Users/adamclare/data/2011_10_03/2011_10_03_drive_0027_sync/image_00/data/0000000000.png",
                      &img);
 
+  cv_imageu8_resize(&img, &img2);
   gui_ImageU8Window image_window;
-  image_window.image = &img;
+  image_window.image = &img2;
 
   gui_imageu8_window_init(&image_window);
   gui_imageu8_window_upload(&image_window);

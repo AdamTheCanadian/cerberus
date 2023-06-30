@@ -7,4 +7,4 @@ add_executable(gui_playground gui_playground/main.c)
 target_link_libraries(gui_playground utils gui)
 
 add_executable(inertial_simulation inertial_simulation/main.c)
-target_link_libraries(inertial_simulation types inertial geodetic)
+target_link_libraries(inertial_simulation types inertial geodetic gui)

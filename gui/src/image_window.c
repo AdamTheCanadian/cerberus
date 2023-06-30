@@ -1,4 +1,5 @@
 #include "gui/image_window.h"
+#include "gui/main_window.h"
 #include <assert.h>
 
 static const char* vs = "#version 330 core \n"
@@ -76,6 +77,9 @@ void gui_imageu8_window_init(gui_ImageU8Window *window) {
   // set texture filtering parameters
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_RED);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_RED);
   glBindVertexArray(0);
 
   window->first_render = 1;
@@ -86,11 +90,11 @@ void gui_imageu8_window_upload(gui_ImageU8Window *window) {
   if (window->first_render == 1) {
     glTexImage2D(GL_TEXTURE_2D,
                  0,
-                 GL_RGBA,
+                 GL_RED,
                  window->image->width,
                  window->image->height,
                  0,
-                 GL_RGBA,
+                 GL_RED,
                  GL_UNSIGNED_BYTE,
                  window->image->image);
     window->first_render = 0;
@@ -102,17 +106,20 @@ void gui_imageu8_window_upload(gui_ImageU8Window *window) {
                     0,
                     window->image->width,
                     window->image->height,
-                    GL_RGBA,
+                    GL_RED,
                     GL_UNSIGNED_BYTE,
                     window->image->image);
   }
 }
 
 void gui_imageu8_window_draw(gui_ImageU8Window *window) {
-  glBindTexture(GL_TEXTURE_2D, window->texture);
-  glViewport(0, 0, window->image->width, window->image->height);
-  // render container
-  glUseProgram(window->shader);
-  glBindVertexArray(window->vao);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  ImVec2 size = {.x = window->image->width, .y = window->image->height};
+  ImVec2 uv0 = {.x = 0, .y = 0};
+  ImVec2 uv1 = {.x = 1, .y = -1};
+  ImVec4 tint = {1, 1, 1, 1};
+  ImVec4 border = {0, 0, 0, 0};
+
+  igBegin("Image", NULL, 0);
+  igImage(window->texture, size, uv0, uv1, tint, border);
+  igEnd();
 }
