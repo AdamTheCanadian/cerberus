@@ -56,6 +56,9 @@ void cv_imageu8_resize(cv_ImageU8 const *src,
   const double x_scale = (double)(src_width - 1) / (double)(dst_width - 1);
   const double y_scale = (double)(src_height - 1) / (double)(dst_height - 1);
 
+  /**
+   * a00(1-dx)(1-dy) + a01*(1-dx)(dy) + a10(dx)(1-dy) + a11(dx)(dy)
+   */
   // Iterate over each pixel in the output image
   for (int y = 0; y < dst_height; y++) {
     for (int x = 0; x < dst_width; x++) {

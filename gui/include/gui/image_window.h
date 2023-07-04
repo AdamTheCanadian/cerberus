@@ -10,6 +10,7 @@ extern "C" {
 
 typedef struct {
   cv_ImageU8 *image;
+  char name[128];
   uint64_t window_width;
   uint64_t window_height;
   uint64_t shader;

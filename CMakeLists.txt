@@ -10,7 +10,7 @@ add_subdirectory(core)
 add_subdirectory(geodetic)
 add_subdirectory(inertial)
 add_subdirectory(cv)
-add_subdirectory(cerberus)
+#add_subdirectory(cerberus)
 
 add_subdirectory(gui)
 add_subdirectory(utils)

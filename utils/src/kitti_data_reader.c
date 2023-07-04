@@ -1,12 +1,13 @@
 #include "utils/kitti_data_reader.h"
 #include <stdio.h>
+#include <assert.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "utils/stb_image.h"
 
 void kitti_data_reader_read_stereo(const KittiDataReader *reader,
-                                   uint8_t *left,
-                                   uint8_t *right) {
+                                   cv_ImageU8 *left,
+                                   cv_ImageU8 *right) {
   stbi_set_flip_vertically_on_load(1);
 
   // Kitti image files are stored as 10 character long file names, where the file name
@@ -27,10 +28,21 @@ void kitti_data_reader_read_stereo(const KittiDataReader *reader,
   int image_resolution_y = 0;
   int num_channels = 0;
   uint8_t *tmp_left = stbi_load(left_image_buffer, &image_resolution_x, &image_resolution_y, &num_channels, 1);
-  uint8_t *tmp_right = stbi_load(right_image_buffer, &image_resolution_x, &image_resolution_y, &num_channels, 1);
+  printf("num_channels %d\n", num_channels);
+  assert(num_channels == 1);
+  assert((image_resolution_x * image_resolution_y) < (int)left->capacity);
 
-  memcpy(left, tmp_left, image_resolution_x * image_resolution_y);
-  memcpy(right, tmp_right, image_resolution_x * image_resolution_y);
+  uint8_t *tmp_right = stbi_load(right_image_buffer, &image_resolution_x, &image_resolution_y, &num_channels, 1);
+  printf("num_channels %d\n", num_channels);
+  assert(num_channels == 1);
+  assert((image_resolution_x * image_resolution_y) < (int)right->capacity);
+
+  memcpy(left->image, tmp_left, image_resolution_x * image_resolution_y);
+  left->width = image_resolution_x;
+  left->height = image_resolution_y;
+  memcpy(right->image, tmp_right, image_resolution_x * image_resolution_y);
+  right->width = image_resolution_x;
+  right->height = image_resolution_y;
 
   stbi_image_free(tmp_left);
   stbi_image_free(tmp_right);

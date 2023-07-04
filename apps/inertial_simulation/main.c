@@ -2,7 +2,9 @@
 #include "types/units.h"
 #include "types/orientation_conversions.h"
 #include "inertial/inertial.h"
+#include "gui/main_window.h"
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
   double time;
@@ -17,6 +19,17 @@ MotionProfile imu_profile[MAX_PROFILE_SIZE] = {0};
 
 
 int main(int argc, char *argv[]) {
+
+  gui_MainWindow main_window;
+  strncpy(main_window.title, "GUI Test", GUI_MAIN_WINDOW_TITLE_MAX_LENGTH);
+  main_window.height = 800;
+  main_window.width = 1200;
+  main_window.background_color[0] = 1.0;
+  main_window.background_color[1] = 1.0;
+  main_window.background_color[2] = 0.0;
+  main_window.background_color[3] = 1.0;
+
+  gui_main_window_init(&main_window);
 
   // Create simulated trajectory, for now just a static imu
   double current_time = 0;
@@ -158,5 +171,27 @@ int main(int argc, char *argv[]) {
     printf("Pose %.7f, %.7f, %.3f\n", imu_profile[i].pose.pos.latitude.rad,
            imu_profile[i].pose.pos.longitude.rad,
            imu_profile[i].pose.pos.height.m);
+  }
+
+  while (gui_main_window_still_open(&main_window)) {
+    gui_main_window_begin_frame(&main_window);
+
+    if (igBegin("Acc z", NULL, ImGuiWindowFlags_None)) {
+      static const ImVec2 s = {.x = -1, .y = 0};
+      ImPlot_BeginPlot("Acc z", s, 0);
+      ImPlot_PlotLine_doublePtrdoublePtr("Z",
+                                         &all_imu_data[1].time,
+                                         &all_imu_data[1].acc.z,
+                                         idx-1,
+                                         0,
+                                         0,
+                                         sizeof(IMUData));
+      ImPlot_EndPlot();
+    }
+    igEnd();
+
+    igShowDemoWindow(NULL);
+    ImPlot_ShowDemoWindow(NULL);
+    gui_main_window_end_frame(&main_window);
   }
 }

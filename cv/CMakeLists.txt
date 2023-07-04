@@ -4,7 +4,8 @@ project(cv)
 include_directories(include)
 add_library(${PROJECT_NAME}
         src/image.c
-        src/io.c)
+        src/io.c
+        src/orb.c)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 add_subdirectory(tests)

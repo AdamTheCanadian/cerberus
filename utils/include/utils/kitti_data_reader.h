@@ -2,6 +2,7 @@
 #define CERBERUS_UTILS_INCLUDE_UTILS_KITTI_DATA_READER_H_
 
 #include <stdint.h>
+#include "cv/image.h"
 
 #define KITTI_DATA_READER_MAX_PATH_LENGTH 256
 
@@ -11,7 +12,7 @@ typedef struct {
 } KittiDataReader;
 
 void kitti_data_reader_read_stereo(const KittiDataReader *reader,
-                                   uint8_t *left,
-                                   uint8_t *right);
+                                   cv_ImageU8 *left,
+                                   cv_ImageU8 *right);
 
 #endif

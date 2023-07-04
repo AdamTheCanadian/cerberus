@@ -119,7 +119,7 @@ void gui_imageu8_window_draw(gui_ImageU8Window *window) {
   ImVec4 tint = {1, 1, 1, 1};
   ImVec4 border = {0, 0, 0, 0};
 
-  igBegin("Image", NULL, 0);
+  igBegin(window->name, NULL, 0);
   igImage(window->texture, size, uv0, uv1, tint, border);
   igEnd();
 }

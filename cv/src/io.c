@@ -14,7 +14,7 @@ void cv_io_read_imageu8(const char *filename,
   int image_resolution_y = 0;
   int num_channels = 0;
 
-  stbi_set_flip_vertically_on_load(1);
+  stbi_set_flip_vertically_on_load(0);
   uint8_t *tmp = stbi_load(filename, &image_resolution_x, &image_resolution_y, &num_channels, 1);
 
   const uint64_t capacity = (uint64_t)image_resolution_x * (uint64_t)image_resolution_y;
