@@ -23,6 +23,11 @@ void gui_cam3d_init(gui_Camera3D *cam);
 
 void gui_cam3d_set_cam_pos(gui_Camera3D *cam,
                            Vec3f pos);
+
+void gui_cam3d_rotate_increment(gui_Camera3D *cam,
+                                double x,
+                                double y,
+                                double z);
 #ifdef __cplusplus
 }
 #endif

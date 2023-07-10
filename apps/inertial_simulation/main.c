@@ -58,10 +58,8 @@ int main(int argc, char *argv[]) {
   main_window.background_color[2] = 1.0f;
   main_window.background_color[3] = 1.0f;
 
-  gui_Camera3D cam;
-  gui_cam3d_init(&cam);
-  gui_cam3d_set_cam_pos(&cam, (Vec3f){.x = 0, .y = 0, .z = 10});
   gui_main_window_init(&main_window);
+  gui_cam3d_set_cam_pos(&main_window.cam, (Vec3f){.x = 0, .y = 0, .z = 30});
 
   gui_grid_setup_vertices(&grid, 1, (gui_GridLimits){.x_min = -10, .x_max = 10, .y_min = -10, .y_max = 10});
   gui_grid_init_gl(&grid);
@@ -69,7 +67,7 @@ int main(int argc, char *argv[]) {
   while (gui_main_window_still_open(&main_window)) {
     gui_main_window_begin_frame(&main_window);
 
-    gui_grid_draw(&grid, &cam.view, &main_window.projection);
+    gui_grid_draw(&grid, &main_window.cam.view, &main_window.projection);
     gui_main_window_end_frame(&main_window);
   }
 }
