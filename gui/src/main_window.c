@@ -1,7 +1,10 @@
 #include "gui/main_window.h"
 #include "glad/glad.h"
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
+
+static void update_projection(gui_MainWindow *window);
 
 void gui_main_window_init(gui_MainWindow *window) {
   assert(window != NULL);
@@ -46,6 +49,8 @@ void gui_main_window_init(gui_MainWindow *window) {
   ImGui_ImplOpenGL3_Init(glsl_version);
   igStyleColorsDark(NULL);
   ImPlot_CreateContext();
+
+  update_projection(window);
 }
 
 bool gui_main_window_still_open(gui_MainWindow *window) {
@@ -74,4 +79,37 @@ void gui_main_window_end_frame(gui_MainWindow *window) {
   igRender();
   ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData());
   glfwSwapBuffers(window->glfw_window);
+}
+
+void update_projection(gui_MainWindow *window) {
+  // Breaking out projection to make code cleaner
+  Mat4f *proj = &window->projection;
+
+  mat4f_set_to_zero(proj);
+  static const float near_plane = 0.01f;
+  static const float far_plane = 1000.0f;
+  static const float fov = 45;
+  const double aspect_ratio = (double)window->width / (double)window->height;
+
+  const double top = near_plane * tan(fov * 0.5 * M_PI / 180.0);
+  const double right = top * aspect_ratio;
+  const double left = -right;
+  const double bottom = -top;
+  const double znear = near_plane;
+  const double zfar = far_plane;
+
+  /* Right left distance */
+  const float rl = (float)(right - left);
+  /* Top bottom distance */
+  const float tb = (float)(top - bottom);
+  /* Far near distance */
+  const float fn = (float)(zfar - znear);
+
+  proj->mat[0] = (float)(znear * 2.0f) / rl;
+  proj->mat[5] = (float)(znear * 2.0f) / tb;
+  proj->mat[8] = (float)(right + left) / rl;
+  proj->mat[9] = (float)(top + bottom) / tb;
+  proj->mat[10] = -(float)(zfar + znear) / fn;
+  proj->mat[11] = -1.0f;
+  proj->mat[14] = -(float)(zfar * znear * 2.0f) / fn;
 }

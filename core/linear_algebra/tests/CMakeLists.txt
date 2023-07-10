@@ -2,7 +2,8 @@ project(linear_algebra_tests)
 
 add_executable(${PROJECT_NAME}
         main.cpp
-        tests_matrix3d.cpp)
+        tests_matrix3d.cpp
+        tests_matrix4f.cpp)
 
 target_link_libraries(${PROJECT_NAME}
         linear_algebra

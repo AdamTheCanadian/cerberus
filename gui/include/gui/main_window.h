@@ -6,6 +6,7 @@ extern "C" {
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "linear_algebra/matrix4f.h"
 #include <stdbool.h>
 
 /* Include ImGui here so any users of main_window.h automatically get imgui functionality */
@@ -28,6 +29,8 @@ typedef struct {
 
   // The background or clear color [R G B A]. Values in range of [0, 1]
   float background_color[4];
+
+  Mat4f projection;
 } gui_MainWindow;
 
 /**
