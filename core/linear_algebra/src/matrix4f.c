@@ -47,3 +47,41 @@ Vec4f mat4f_multiply_vec4f(const Mat4f *mat,
   }
   return result;
 }
+
+static inline float determinant3(float a, float b, float c, float d, float e, float f, float g, float h, float i)
+{
+  return a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
+}
+
+Mat4f mat4f_inverse(Mat4f const *mat) {
+  
+  const float det =
+      mat->mat[0] * determinant3(mat->mat[5], mat->mat[6], mat->mat[7], mat->mat[9], mat->mat[10], mat->mat[11], mat->mat[13], mat->mat[14], mat->mat[15]) -
+      mat->mat[1] * determinant3(mat->mat[4], mat->mat[6], mat->mat[7], mat->mat[8], mat->mat[10], mat->mat[11], mat->mat[12], mat->mat[14], mat->mat[15]) +
+      mat->mat[2] * determinant3(mat->mat[4], mat->mat[5], mat->mat[7], mat->mat[8], mat->mat[9], mat->mat[11], mat->mat[12], mat->mat[13], mat->mat[15]) -
+      mat->mat[3] * determinant3(mat->mat[4], mat->mat[5], mat->mat[6], mat->mat[8], mat->mat[9], mat->mat[10], mat->mat[12], mat->mat[13], mat->mat[14]);
+  const float det_inv = 1.0f / det;
+
+  Mat4f temp;
+  temp.mat[0] = det_inv * determinant3(mat->mat[5], mat->mat[6], mat->mat[7], mat->mat[9], mat->mat[10], mat->mat[11], mat->mat[13], mat->mat[14], mat->mat[15]);
+  temp.mat[1] = det_inv * -determinant3(mat->mat[1], mat->mat[2], mat->mat[3], mat->mat[9], mat->mat[10], mat->mat[11], mat->mat[13], mat->mat[14], mat->mat[15]);
+  temp.mat[2] = det_inv * determinant3(mat->mat[1], mat->mat[2], mat->mat[3], mat->mat[5], mat->mat[6], mat->mat[7], mat->mat[13], mat->mat[14], mat->mat[15]);
+  temp.mat[3] = det_inv * -determinant3(mat->mat[1], mat->mat[2], mat->mat[3], mat->mat[5], mat->mat[6], mat->mat[7], mat->mat[9], mat->mat[10], mat->mat[11]);
+
+  temp.mat[4] = det_inv * -determinant3(mat->mat[4], mat->mat[6], mat->mat[7], mat->mat[8], mat->mat[10], mat->mat[11], mat->mat[12], mat->mat[14], mat->mat[15]);
+  temp.mat[5] = det_inv * determinant3(mat->mat[0], mat->mat[2], mat->mat[3], mat->mat[8], mat->mat[10], mat->mat[11], mat->mat[12], mat->mat[14], mat->mat[15]);
+  temp.mat[6] = det_inv * -determinant3(mat->mat[0], mat->mat[2], mat->mat[3], mat->mat[4], mat->mat[6], mat->mat[7], mat->mat[12], mat->mat[14], mat->mat[15]);
+  temp.mat[7] = det_inv * determinant3(mat->mat[0], mat->mat[2], mat->mat[3], mat->mat[4], mat->mat[6], mat->mat[7], mat->mat[8], mat->mat[10], mat->mat[11]);
+
+  temp.mat[8] = det_inv * determinant3(mat->mat[4], mat->mat[5], mat->mat[7], mat->mat[8], mat->mat[9], mat->mat[11], mat->mat[12], mat->mat[13], mat->mat[15]);
+  temp.mat[9] = det_inv * -determinant3(mat->mat[0], mat->mat[1], mat->mat[3], mat->mat[8], mat->mat[9], mat->mat[11], mat->mat[12], mat->mat[13], mat->mat[15]);
+  temp.mat[10] = det_inv * determinant3(mat->mat[0], mat->mat[1], mat->mat[3], mat->mat[4], mat->mat[5], mat->mat[7], mat->mat[12], mat->mat[13], mat->mat[15]);
+  temp.mat[11] = det_inv * -determinant3(mat->mat[0], mat->mat[1], mat->mat[3], mat->mat[4], mat->mat[5], mat->mat[7], mat->mat[8], mat->mat[9], mat->mat[11]);
+
+  temp.mat[12] = det_inv * -determinant3(mat->mat[4], mat->mat[5], mat->mat[6], mat->mat[8], mat->mat[9], mat->mat[10], mat->mat[12], mat->mat[13], mat->mat[14]);
+  temp.mat[13] = det_inv * determinant3(mat->mat[0], mat->mat[1], mat->mat[2], mat->mat[8], mat->mat[9], mat->mat[10], mat->mat[12], mat->mat[13], mat->mat[14]);
+  temp.mat[14] = det_inv * -determinant3(mat->mat[0], mat->mat[1], mat->mat[2], mat->mat[4], mat->mat[5], mat->mat[6], mat->mat[12], mat->mat[13], mat->mat[14]);
+  temp.mat[15] = det_inv * determinant3(mat->mat[0], mat->mat[1], mat->mat[2], mat->mat[4], mat->mat[5], mat->mat[6], mat->mat[8], mat->mat[9], mat->mat[10]);
+
+  return temp;
+}

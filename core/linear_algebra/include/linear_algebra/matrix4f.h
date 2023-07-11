@@ -35,6 +35,7 @@ static inline void mat4f_set(Mat4f *mat,
   mat->mat[i * 4 + j] = value;
 }
 
+Mat4f mat4f_inverse(Mat4f const *mat);
 #ifdef __cplusplus
 }
 #endif
